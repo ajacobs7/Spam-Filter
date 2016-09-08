@@ -1,9 +1,6 @@
-
 # 
 # Adapted from Version 1.0 by Tao Ban, 2010.5.26 found on: http://csmining.org/index.php/spam-email-datasets-.html
 #
-# 
-# and store it in a new file with the same name in the dst dir. 
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.externals import joblib
@@ -22,7 +19,6 @@ def ExtractFile(filename):
 		os.exit(1)
 	fp = open(filename)
 	msg = email.message_from_file(fp)
-	#fp.close()
 
 	payload = msg.get_payload(decode=True)
 	if type(payload) == type(list()) :
@@ -58,15 +54,15 @@ def ExtractDirHelper(srcdir, df):
 	return df
 
 
-def vectorize(emails):
+def vectorize(emails, vec_name):
 	vec = CountVectorizer(stop_words = 'english', ngram_range=(1,2), max_df = 0.5) #min_df=2
 	dtm = vec.fit_transform(emails).toarray() #, columns=vec.get_feature_names())
-	#joblib.dump(vec, 'Vectorizer.pkl')
+	joblib.dump(vec, 'Models/' + vec_name + '.pkl', compress=1)
 	return dtm
 
 def ExtractDir(srcdir):
 	data = pd.DataFrame(ExtractDirHelper(srcdir, []), columns = ['subject', 'body', 'features'])
-	v_sub = pd.DataFrame(vectorize(data['subject']))
-	v_body = pd.DataFrame(vectorize(data['body']))
-	v_feat = pd.DataFrame(vectorize(data['features']))
+	v_sub = pd.DataFrame(vectorize(data['subject'], 'Subject_Vectorizer'))
+	v_body = pd.DataFrame(vectorize(data['body'], 'Body_Vectorizer'))
+	v_feat = pd.DataFrame(vectorize(data['features'], 'Feature_Vectorizer'))
 	return pd.concat([v_sub, v_body, v_feat], axis = 1, ignore_index=True) #.values.tolist()
