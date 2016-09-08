@@ -1,6 +1,5 @@
 from sklearn.cross_validation import train_test_split
-from sklearn.naive_bayes import GaussianNB
-from sklearn.linear_model import LogisticRegression, LogisticRegressionCV, PassiveAggressiveClassifier
+from sklearn.linear_model import LogisticRegression, PassiveAggressiveClassifier
 from sklearn.metrics import accuracy_score, mean_squared_error, confusion_matrix, roc_auc_score, precision_score, recall_score
 from math import sqrt
 import pandas as pd
@@ -14,7 +13,7 @@ def downloadData():
 	return emails, labels
 
 def train(emails, labels):
-	model = GaussianNB() #LogisticRegression() #PassiveAggressiveClassifier() #SGDClassifier() #GaussianNB() #MultinomialNB()
+	model = LogisticRegression()
 	model.fit(emails, labels)
 	return model
 

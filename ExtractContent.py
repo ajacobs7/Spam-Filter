@@ -22,6 +22,7 @@ def ExtractFile(filename):
 		os.exit(1)
 	fp = open(filename)
 	msg = email.message_from_file(fp)
+	#fp.close()
 
 	payload = msg.get_payload(decode=True)
 	if type(payload) == type(list()) :
@@ -35,6 +36,7 @@ def ExtractFile(filename):
 	recieved = str(msg.get('Received'))	
 	returnPath = str(msg.get('Return-Path'))
 	to = str(msg.get('To'))
+
 
 	#return sub, unicode(payload + virus + recieved + returnpath + to, errors='replace') # or 'ignore'
 	return sub, payload, unicode(virus + recieved + returnPath + to, errors='replace')
