@@ -15,8 +15,8 @@ def extract_file(filename):
 	''' Extract the email contents (subject, body, virus scanning info...)  from the .eml file. '''
 
 	if not os.path.exists(filename): # dest path doesnot exist
-		print "ERROR: input file does not exist:", filename
-		os.exit(1)
+		print "Input file does not exist:"
+		exit()
 
 	fp = open(filename)
 	msg = email.message_from_file(fp)
@@ -53,6 +53,10 @@ def extract_dir_helper(srcdir, df):
 
 def extract_dir(srcdir):
 	''' Extract info from all .eml files in the specified directory. '''
+	
+	if not os.path.exists(srcdir):
+		print "Input directory does not exist"
+		exit()
 
 	return extract_dir_helper(srcdir, [])
 	

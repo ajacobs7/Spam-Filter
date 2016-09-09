@@ -7,20 +7,25 @@
 '''
 
 from sklearn.externals import joblib
-from extract import extract_file
+from extract import extract_file, extract_dir
 from vectorize import vectorize
 
-filename = input('Email File Name: ')
+scale = raw_input('(1) File (2) Directory : ')
 
-print("Extracting Data...")
-email = vectorize([extract_file(filename)])
+if scale == '1': 
+	filename = raw_input('File Name: ')
+	email = [extract_file(filename)]
+elif scale == '2':
+	direc = raw_input('Directory: ')
+	email = extract_dir(direc)
+else:
+	print('Invalid')
+	exit()
 
-print("Predicting...")
+
+email = vectorize(email)
 model = joblib.load('Models/Filter_Model.pkl')
 pred = model.predict(email)
 
+print ['SPAM' if x == 0 else 'HAM' for x in pred]
 
-if pred[0] == 0:
-	print('SPAM')
-else:
-	print('HAM')
