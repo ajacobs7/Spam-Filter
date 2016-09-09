@@ -35,4 +35,5 @@ def load_vectorize(emails):
 	''' Loads the correct vectorizer, fits the email data, returns vectorized data. '''
 
 	sub_vec = joblib.load('Models/' + emails.name + '_Vectorizer.pkl')
-	return pd.DataFrame(sub_vec.transform(emails))
+	dtm = sub_vec.transform(emails).toarray()
+	return pd.DataFrame(dtm)

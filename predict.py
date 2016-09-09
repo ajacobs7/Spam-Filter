@@ -13,13 +13,14 @@ from vectorize import vectorize
 filename = input('Email File Name: ')
 
 print("Extracting Data...")
-email = vectorize(extract_file(filename))
+email = vectorize([extract_file(filename)])
 
 print("Predicting...")
 model = joblib.load('Models/Filter_Model.pkl')
-pred = model.transform(email)
+pred = model.predict(email)
 
-if pred == 0:
+
+if pred[0] == 0:
 	print('SPAM')
 else:
 	print('HAM')
