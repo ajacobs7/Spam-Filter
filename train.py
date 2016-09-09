@@ -1,3 +1,11 @@
+'''
+    File name: train.py
+    Author: Austin Jacobs
+    Date created: 9/8/16
+    Date last modified: 9/8/16
+    Python Version: 2.7
+'''
+
 from sklearn.cross_validation import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
@@ -5,12 +13,12 @@ from sklearn.metrics import accuracy_score, mean_squared_error, roc_auc_score, p
 
 from math import sqrt
 import pandas as pd
-from ExtractContent import ExtractDir
-from Vectorize import vectorize
+from extract import extract_dir
+from vectorize import vectorize
 
 
-print('Extracting Data...')
-emails = vectorize(ExtractDir("CSDMC2010_SPAM/TRAINING"), training=True)
+print('\nExtracting Data...')
+emails = vectorize(extract_dir("CSDMC2010_SPAM/TRAINING"), training=True)
 labels = pd.read_table("CSDMC2010_SPAM/SPAMTrain.label", delim_whitespace=True, names=["labels", "files"])["labels"] #SPAM = 0, HAM = 1
 
 print('Splitting...')
@@ -20,7 +28,7 @@ print('Training...')
 model = LogisticRegression()
 model.fit(X_train, y_train)
 
-print('Saving...')
+print('Saving Model...')
 joblib.dump(model, 'Models/Filter_Model.pkl', compress=1)
 
 print('\nModel Evaluation:')
@@ -32,8 +40,8 @@ precision = precision_score(y_test, pred_labels)
 recall = recall_score(y_test, pred_labels)
 roc_score = roc_auc_score(y_test, pred_labels)
 
-print("   RMSE: %f" % rmse)
-print("   Accuracy: %f" % accuracy)
-print("   ROC: %f" % roc_score)
-print("   Precision: %f" % precision)
-print("   Recall: %f" % recall)
+print("  RMSE: %f" % rmse)
+print("  Accuracy: %f" % accuracy)
+print("  ROC: %f" % roc_score)
+print("  Precision: %f" % precision)
+print("  Recall: %f\n" % recall)

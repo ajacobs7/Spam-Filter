@@ -1,3 +1,11 @@
+'''
+    File name: vectorize.py
+    Author: Austin Jacobs
+    Date created: 9/8/16
+    Date last modified: 9/8/16
+    Python Version: 2.7
+'''
+
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.externals import joblib
 import pandas as pd
