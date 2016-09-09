@@ -6,10 +6,11 @@ from sklearn.metrics import accuracy_score, mean_squared_error, roc_auc_score, p
 from math import sqrt
 import pandas as pd
 from ExtractContent import ExtractDir
+from Vectorize import vectorize
 
 
 print('Extracting Data...')
-emails = ExtractDir("CSDMC2010_SPAM/TRAINING")
+emails = vectorize(ExtractDir("CSDMC2010_SPAM/TRAINING"), training=True)
 labels = pd.read_table("CSDMC2010_SPAM/SPAMTrain.label", delim_whitespace=True, names=["labels", "files"])["labels"] #SPAM = 0, HAM = 1
 
 print('Splitting...')

@@ -2,17 +2,13 @@
 # Adapted from Version 1.0 by Tao Ban, 2010.5.26 found on: http://csmining.org/index.php/spam-email-datasets-.html
 #
 
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.externals import joblib
-
-import pandas as pd
 import email.parser 
 import os, stat
 import shutil
 
-# From a .eml file, xtracts the email contents (subject, body, virus scanning info...)
 def ExtractFile(filename):
-	''' Extract the subject and payload from the .eml file. '''
+	''' Extract the email contents (subject, body, virus scanning info...)  from the .eml file. '''
 
 	if not os.path.exists(filename): # dest path doesnot exist
 		print "ERROR: input file does not exist:", filename
@@ -33,14 +29,11 @@ def ExtractFile(filename):
 	returnPath = str(msg.get('Return-Path'))
 	to = str(msg.get('To'))
 
-
-	#return sub, unicode(payload + virus + recieved + returnpath + to, errors='replace') # or 'ignore'
 	return sub, payload, unicode(virus + recieved + returnPath + to, errors='replace')
 
 
-# Extracts info from all .eml files in the specified directory
 def ExtractDirHelper(srcdir, df):
-	'''Extract the body information from all .eml files in the srcdir and store in an array.'''
+	'''Uses recursion to extract info from all .eml files in the specified directory.'''
 
 	files = os.listdir(srcdir)
 	for file in files:
@@ -54,15 +47,8 @@ def ExtractDirHelper(srcdir, df):
 	return df
 
 
-def vectorize(emails, vec_name):
-	vec = CountVectorizer(stop_words = 'english', ngram_range=(1,2), max_df = 0.5) #min_df=2
-	dtm = vec.fit_transform(emails).toarray() #, columns=vec.get_feature_names())
-	joblib.dump(vec, 'Models/' + vec_name + '.pkl', compress=1)
-	return dtm
-
 def ExtractDir(srcdir):
-	data = pd.DataFrame(ExtractDirHelper(srcdir, []), columns = ['subject', 'body', 'features'])
-	v_sub = pd.DataFrame(vectorize(data['subject'], 'Subject_Vectorizer'))
-	v_body = pd.DataFrame(vectorize(data['body'], 'Body_Vectorizer'))
-	v_feat = pd.DataFrame(vectorize(data['features'], 'Feature_Vectorizer'))
-	return pd.concat([v_sub, v_body, v_feat], axis = 1, ignore_index=True) #.values.tolist()
+	'''Extracts info from all .eml files in the specified directory.'''
+
+	return ExtractDirHelper(srcdir, [])
+	
